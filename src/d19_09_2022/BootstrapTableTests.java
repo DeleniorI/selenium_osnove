@@ -152,7 +152,7 @@ public class BootstrapTableTests {
 		driver.get(baseUrl + "/iframe/K5yrx");
 		TakesScreenshot scrShot = ((TakesScreenshot) driver);
 		File source = scrShot.getScreenshotAs(OutputType.FILE);
-		FileUtils.copyFile(source, new File("img/d19_09_2022/test.png"));
+		FileUtils.copyFile(source, new File("src/d19_09_2022/test.png"));
 
 	}
 
