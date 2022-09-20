@@ -1,5 +1,7 @@
 package d19_09_2022;
 
+import static org.testng.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -113,6 +115,7 @@ public class BootstrapTableTests {
 		for (int i = 0; i < expectedCellList.size(); i++) {
 			Assert.assertEquals(imePrezimeSrednje.get(i), expectedCellList.get(i).getText(),
 					tableHeadList.get(i).getText() + " should be " + imePrezimeSrednje.get(i));
+			
 		}
 
 	}
@@ -123,14 +126,24 @@ public class BootstrapTableTests {
 		String actualResult = driver.getTitle();
 		String expectedResult = "Table with Edit and Update Data - Bootsnipp.com";
 		Assert.assertEquals(actualResult, expectedResult, "Title should be " + expectedResult);
-
+		
+		// Svi redovi koji sadrze element <td>
+		List<WebElement> rowsOld = driver.findElements(By.xpath("//tbody/tr[td]"));
+		
 		driver.findElement(By.xpath("//*[@id ='d1']/td[6]/button")).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("delete")));
 		driver.findElement(By.id("del")).click();
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("delete")));
-
-		Assert.assertFalse(driver.findElement(By.xpath("//table/tbody/tr")).isDisplayed(),
-				"Table size should be reduced by one");
+		
+		// Novi table nakon brisanja prvog reda
+		List<WebElement> rowsNew = driver.findElements(By.xpath("//tbody/tr[td]"));
+		
+		// Proveravamo da li je stari table veci od novog. Ako jeste, nastavljamo program, ako nije zaustavljamo.
+		Assert.assertTrue(rowsOld.size() > rowsNew.size(), "Table size should be reduced by one");
+		
+		// Drugi nacin, ne znam da l je tacno ovo
+//		Assert.assertFalse(driver.findElement(By.xpath("//table/tbody/tr[contains(td)]")).isDisplayed(),
+//				"Table size should be reduced by one");
 
 	}
 
