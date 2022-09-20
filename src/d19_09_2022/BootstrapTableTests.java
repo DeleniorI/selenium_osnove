@@ -69,7 +69,7 @@ public class BootstrapTableTests {
 	private WebDriver driver;
 	private String baseUrl = "https://s.bootsnipp.com";
 	private WebDriverWait wait;
-	private ArrayList<String> imePrezimeSrednje = new ArrayList<>(); // Cisto da iskomplikujem malo, aka "mrsim muda"
+	private ArrayList<String> imePrezimeSrednje = new ArrayList<>();
 
 	@BeforeClass
 	public void setup() {
@@ -93,6 +93,7 @@ public class BootstrapTableTests {
 		driver.findElement(By.xpath("//*[@id = 'd1']/td[5]/button")).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("modal-dialog")));
 
+		// Brisanje teksta iz inputa i dodavanje novog iz ArrayListe 'imePrezimeSrednje' line:82,83,84		
 		List<WebElement> inputList = driver.findElements(By.xpath("//div[contains(@class, 'modal-body')]/input"));
 		for (int i = 0; i < inputList.size(); i++) {
 			inputList.get(i).clear();
@@ -102,15 +103,13 @@ public class BootstrapTableTests {
 		driver.findElement(By.id("up")).click();
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-dialog")));
 
-		// Izvinjavam se, mora se napravim pametan
+		// Lista samo zbog poruke, skroz bespotrebno 
 		List<WebElement> tableHeadList = driver
-				.findElements(By.xpath("//table//th[position() > 1 and position() < 5]")); // Lista samo zbog poruke, da
-																							// bih znao da l je fName,
-																							// lName ili mName
+				.findElements(By.xpath("//table//th[position() > 1 and position() < 5]"));
 
-		List<WebElement> expectedCellList = driver.findElements(By.xpath("//tr[@id = 'd1']/td[@id]")); // Lista celija
-																										// koje
-																										// proveravamo
+		// Lista celija koje proveravamo
+		List<WebElement> expectedCellList = driver.findElements(By.xpath("//tr[@id = 'd1']/td[@id]"));
+
 		for (int i = 0; i < expectedCellList.size(); i++) {
 			Assert.assertEquals(imePrezimeSrednje.get(i), expectedCellList.get(i).getText(),
 					tableHeadList.get(i).getText() + " should be " + imePrezimeSrednje.get(i));
@@ -134,14 +133,14 @@ public class BootstrapTableTests {
 				"Table size should be reduced by one");
 
 	}
-	
+
 	@Test(priority = 30)
 	public void takeAScreenshot() throws IOException {
 		driver.get(baseUrl + "/iframe/K5yrx");
-		TakesScreenshot scrShot = ((TakesScreenshot)driver);
+		TakesScreenshot scrShot = ((TakesScreenshot) driver);
 		File source = scrShot.getScreenshotAs(OutputType.FILE);
 		FileUtils.copyFile(source, new File("img/d19_09_2022/test.png"));
-		
+
 	}
 
 	@AfterClass
